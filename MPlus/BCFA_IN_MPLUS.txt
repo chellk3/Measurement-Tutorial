@@ -1,0 +1,51 @@
+DATA:
+	FILE IS Quality.txt;  
+
+VARIABLE:
+    NAMES ARE
+	diagnostic_tests high_risk medicines rapid_tests 
+	spontaneous_demand patient_flows record_keeping program_offer 
+	guidelines community_outreach;
+
+USEVARIABLES ARE 
+	diagnostic_tests high_risk medicines rapid_tests 
+	spontaneous_demand patient_flows record_keeping  
+	program_offer guidelines community_outreach;
+	
+CATEGORICAL 
+	diagnostic_tests high_risk medicines rapid_tests 
+	spontaneous_demand patient_flows record_keeping  
+	program_offer guidelines community_outreach;
+
+ANALYSIS: 
+	ESTIMATOR = BAYES; ! specify how many independent MCMC chains
+	!CHAINS = 2; ! number of strings generated, default = 2
+	!POINT = MEAN; ! type of Bayes point estimate to compute, default = MEAN
+
+MODEL:
+  	ANC BY diagnostic_tests high_risk medicines rapid_tests (a1-a4)
+  	 spontaneous_demand patient_flows record_keeping (a5-a7)
+  	 program_offer guidelines community_outreach (a8-a10);
+
+MODEL PRIORS:
+  	! the priors for each parameter can be specified here
+  	!a1 ~ N(0,10); 
+  	!a2 ~ N(0,10) a3 ~ N(0,10) a4 ~ N(0,10);
+  	!a5 ~ N(0,10) a6 ~ N(0,10) a7 ~ N(0,10);
+  	!a8 ~ N(0,10) a9 ~ N(0,10) a10 ~ N(0,10);
+  	! the same priori can be specified for the parameters
+  	a1-a10 ~ N(0,10); 
+
+OUTPUT: stand; !Generates standardized estimates
+	cinterval; !Generates confidence intervals
+	
+PLOT:
+  	TYPE = PLOT3; ! Plot descriptive information for the latent variable (archive .gh5);
+
+DATA IMPUTATION:
+  	NDATASETS = 1; 
+  	SAVE = imput*.dat; 
+
+SAVEDATA:
+  	SAVE FSCORES(1);
+  	FILE = scores_ANC.dat; 

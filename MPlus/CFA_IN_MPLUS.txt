@@ -1,0 +1,33 @@
+DATA:
+	FILE IS Quality.txt;  
+
+VARIABLE:
+    NAMES ARE
+	diagnostic_tests high_risk medicines rapid_tests 
+	spontaneous_demand patient_flows record_keeping  
+	program_offer guidelines community_outreach;
+
+USEVARIABLES ARE 
+	diagnostic_tests high_risk medicines rapid_tests 
+	spontaneous_demand patient_flows record_keeping  
+	program_offer guidelines community_outreach;
+	
+CATEGORICAL 
+	diagnostic_tests high_risk medicines rapid_tests 
+	spontaneous_demand patient_flows record_keeping  
+	program_offer guidelines community_outreach;
+
+ANALYSIS: 
+	ESTIMATOR = WLSMV;
+
+MODEL:
+	ANC BY diagnostic_tests high_risk medicines rapid_tests 
+	spontaneous_demand patient_flows record_keeping  
+	program_offer guidelines community_outreach;
+
+OUTPUT: stand;
+	cinterval;
+
+SAVEDATA:
+    file is scores-ANC.txt;
+    save = fscores;

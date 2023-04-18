@@ -1,0 +1,28 @@
+# load (or install if necessary) the lavaan package (only needed once per session)
+# install.packages("lavaan",dependencies = T)
+library(lavaan)
+
+# specify the model
+ANC.model <-  ``ANC =~ diagnostic_tests + high_risk + medicines + 
+                       rapid_tests + spontaneous_demand + 
+                       patient_flows + record_keeping +
+                       program_offer + guidelines + community_outreach''
+
+# loading the lavaan package and tuning the model
+fit <- cfa(ANC.model, data = Quality,
+           ordered = TRUE,estimator="WLSMV")
+
+# display summary output (standardized estimates)
+summary(fit, fit.measures = TRUE, standardized=TRUE)
+
+# display goodness of fit measures
+fitMeasures(fit)
+
+# display generated scores 
+predict(fit)
+
+# load the semTools package (only needed once per session)
+library(semTools)
+
+# display reliability measures  
+reliability(fit)

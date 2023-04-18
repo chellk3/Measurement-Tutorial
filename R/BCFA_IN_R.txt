@@ -1,0 +1,24 @@
+# load (or install if necessary) the blavaan package (only needed once per session)
+# install.packages("blavaan",dependencies = T)
+library(blavaan)
+
+# specify the model
+ANC.model <-  ``ANC =~ diagnostic_tests + high_risk + medicines + 
+                       rapid_tests + spontaneous_demand + 
+                       patient_flows + record_keeping +
+                       program_offer + guidelines + community_outreach''
+
+# prior specification (only for the loading factors)
+mydp <- dpriors(lambda="normal(0,10)") #default of R
+
+# loading the blavaan package and tuning the model
+fit <- bcfa(ANC.model, data = Quality, ordered = TRUE, dp = mydp)
+
+# display summary output (standardized estimates)
+summary(fit, standardized = TRUE)
+
+# display Bayesian model assessment measures
+blavFitIndices(fit)
+               
+# display generated scores 
+blavPredict(fit, type = "lv")
